@@ -17,8 +17,9 @@ import {
 import { DEVICE_TYPE } from '../../enums';
 import {
   buyMeACoffeeText,
-  donateUsingPayPal,
+  supportUsingPayPal,
 } from '../../templates/fileExplorer';
+import { isKalamModeSupported } from '../../helpers/binaries';
 
 export const initialState = {
   focussedFileExplorerDeviceType: {
@@ -118,13 +119,13 @@ export const initialState = {
         icon: faSdCard,
       },
       mtpMode: {
-        enabled: true,
+        enabled: isKalamModeSupported(),
         label: 'MTP Mode',
         icon: faPlug,
       },
       paypal: {
         enabled: true,
-        label: donateUsingPayPal,
+        label: supportUsingPayPal,
         icon: faPaypal,
       },
       buyMeACoffee: {

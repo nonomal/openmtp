@@ -3,12 +3,17 @@ definitions:
     instance_type: mac_mini_m1
 
   instance_mac_intel_x64: &instance_mac_intel_x64
-    instance_type: mac_mini
+    instance_type: mac_pro
 
-  env_versions: &env_versions
-    node: 16.15.0
-    npm: latest
-    xcode: latest
+  mac_m1_env_versions: &mac_m1_env_versions
+    node: 16.19.0
+    npm: 8.16.0
+    xcode: 15.3
+
+  mac_intel_x64_env_versions: &mac_intel_x64_env_versions
+    node: 16.19.0
+    npm: 8.16.0
+    xcode: 14.2
 
   mac_m1_arm64_artifacts: &mac_m1_arm64_artifacts
     artifacts:
@@ -39,7 +44,8 @@ definitions:
 
     - &install_global_packages
       name: Installing global packages
-      script: npm install -g yarn @sentry/cli node-gyp zx yarn --force
+      script: |
+        npm install -g yarn @sentry/cli node-gyp zx yarn --force
 
     - &install_app_packages
       name: Installing app packages
@@ -124,7 +130,7 @@ workflows:
 
     environment:
       <<: *env_mac_signing
-      <<: *env_versions
+      <<: *mac_m1_env_versions
       vars:
         WORKFLOW_ENV: 'prod'
 
@@ -143,7 +149,7 @@ workflows:
 
     environment:
       <<: *env_mac_signing
-      <<: *env_versions
+      <<: *mac_intel_x64_env_versions
       vars:
         WORKFLOW_ENV: 'prod'
 
@@ -163,7 +169,7 @@ workflows:
 
     environment:
       <<: *env_mac_signing
-      <<: *env_versions
+      <<: *mac_m1_env_versions
       vars:
         WORKFLOW_ENV: 'dev'
 
@@ -182,7 +188,7 @@ workflows:
 
     environment:
       <<: *env_mac_signing
-      <<: *env_versions
+      <<: *mac_intel_x64_env_versions
       vars:
         WORKFLOW_ENV: 'dev'
 

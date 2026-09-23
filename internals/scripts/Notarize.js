@@ -2,8 +2,10 @@ require('dotenv').config();
 
 const path = require('path');
 const fs = require('fs');
-const yaml = require('js-yaml');
-const { notarize: electronNotarize } = require('electron-notarize');
+const { notarize: electronNotarize } = require('@electron/notarize');
+const electronBuilderConfig = require('../../electron-builder-config');
+
+const electronBuilderData = electronBuilderConfig();
 
 const { ELECTRON_NOTARIZE } = process.env;
 
@@ -18,17 +20,12 @@ exports.default = async (context) => {
     return;
   }
 
-  const electronBuilderYmlContents = fs.readFileSync(
-    './electron-builder.yml',
-    'utf8'
-  );
-  const electronBuilderYml = yaml.load(electronBuilderYmlContents);
-
-  const appBundleId = electronBuilderYml.appId;
+  const appBundleId = electronBuilderData.appId;
   const appName = context.packager.appInfo.productFilename;
   const appPath = path.join(appOutDir, `${appName}.app`);
   const appleId = process.env.APPLEID;
   const appleIdPassword = process.env.APPLE_APP_SPECIFIC_PASSWORD;
+  const appleTeamId = process.env.APPLE_TEAM_ID;
 
   if (!fs.existsSync(appPath)) {
     throw new Error(`Cannot find application at: ${appPath}`);
@@ -42,5 +39,6 @@ exports.default = async (context) => {
     appPath,
     appleId,
     appleIdPassword,
+    teamId: appleTeamId,
   });
 };

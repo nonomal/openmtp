@@ -5,15 +5,17 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import BuildIcon from '@material-ui/icons/Build';
-import SmartphoneIcon from '@material-ui/icons/Smartphone';
-import CameraRollIcon from '@material-ui/icons/CameraRoll';
-import MemoryIcon from '@material-ui/icons/Memory';
+import SystemUpdate from '@material-ui/icons/SystemUpdate';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import { styles } from '../styles/WhatsNew';
 import { APP_NAME, APP_VERSION } from '../../../constants/meta';
+import { isKalamModeSupported } from '../../../helpers/binaries';
+import { MTP_MODE } from '../../../enums';
 
 class WhatsNew extends PureComponent {
   render() {
+    const isKalamModeDisabled = !isKalamModeSupported();
     const { classes: styles, hideTitle } = this.props;
 
     return (
@@ -31,31 +33,35 @@ class WhatsNew extends PureComponent {
         <List>
           <ListItem>
             <ListItemIcon>
-              <MemoryIcon htmlColor="#fa4d0a" />
+              <CheckCircleIcon htmlColor="#4caf50" />
             </ListItemIcon>
-            <ListItemText primary="Much awaited Apple Silicon support" />
+            <ListItemText
+              primary="Added support for macOS 27 Golden Gate"
+              secondary="Fixes a crash on launch on macOS 27 Golden Gate"
+            />
           </ListItem>
 
           <ListItem>
             <ListItemIcon>
-              <SmartphoneIcon />
+              <NewReleasesIcon htmlColor="#ff9800" />
             </ListItemIcon>
-            <ListItemText primary={`Garmin device support`} />
+            <ListItemText
+              primary={`The next generation of ${APP_NAME} is on its way`}
+              secondary="A major upgrade with new features, and big improvements to overall stability and performance is in the works and coming soon. Stay tuned, thanks for all the support!"
+            />
           </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <CameraRollIcon />
-            </ListItemIcon>
-            <ListItemText primary={`Fujifilm device support`} />
-          </ListItem>
-
-          <ListItem>
-            <ListItemIcon>
-              <BuildIcon />
-            </ListItemIcon>
-            <ListItemText primary="Other UI optimization and performance improvements" />
-          </ListItem>
+          {isKalamModeDisabled && (
+            <ListItem>
+              <ListItemIcon>
+                <SystemUpdate htmlColor="#fa4d0a" />
+              </ListItemIcon>
+              <ListItemText
+                primary={`We have now officially retired the support for '${MTP_MODE.kalam}' Kernel on macOS 10.13 (OS X El High Sierra) and lower`}
+                secondary={`However the '${MTP_MODE.legacy}' MTP mode will continue working on these outdated machines`}
+              />
+            </ListItem>
+          )}
         </List>
       </div>
     );
